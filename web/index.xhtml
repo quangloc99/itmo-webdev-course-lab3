@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:custom="http://java.sun.com/jsf/composite/custom-components"
+>
+<h:head>
+    <title>Lab 3 - Web programming - Tran Quang Loc</title>
+</h:head>
+<h:body>
+    <div class="caption">
+       <h1>Web programming - Lab 3</h1>
+       <h2>Tran Quang Loc</h2>
+       <h2>P3200</h2>
+       <p>Variant: 200027</p>
+    </div>
+    <h:form>
+        <custom:simple-clock id="clock-displayer"
+                             day="#{clock.now.dayOfMonth}"
+                             month="#{clock.now.month}"
+                             year="#{clock.now.year}"
+                             hour="#{clock.now.hour}"
+                             minute="#{clock.now.minute}"
+                             second="#{clock.now.second}"
+        />
+        <p:poll interval="3" listener="#{clock.updateNow}" update="clock-displayer"/>
+    </h:form>
+</h:body>
+</html>
