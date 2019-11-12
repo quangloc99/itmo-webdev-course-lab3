@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://java.sun.com/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+>
+<h:head>
+
+</h:head>
+
+<h:body>
+    <h:form>
+        <c:set var="fieldNameColSize" value="2"/>
+        <c:set var="inputColSize" value="4"/>
+        <c:set var="messageColSize" value="6"/>
+
+        <div class="ui-g">
+            <div class="ui-g-#{fieldNameColSize}">X</div>
+            <div class="ui-g-#{messageColSize}">
+                <h:message id="input-x-message" for="input-x"/>
+            </div>
+            <div class="ui-g-#{inputColSize}">
+                <p:inputText id="input-x" value="#{app.editor.x}"
+                             required="true"
+                             requiredMessage="field required"
+                             converterMessage="must be number between #{variantData.xRange.low} and #{variantData.xRange.high}"
+                             validatorMessage="must be number between #{variantData.xRange.low} and #{variantData.xRange.high}"
+                >
+                    <f:validateDoubleRange minimum="#{variantData.xRange.low}" maximum="#{variantData.xRange.high}"/>
+                    <f:converter converterId="javax.faces.Double" />
+                    <p:ajax event="keyup" update="input-x-message" validateClient="true"/>
+                </p:inputText>
+            </div>
+        </div>
+
+        <div class="ui-g">
+            <div class="ui-g-#{fieldNameColSize}">Y</div>
+            <div class="ui-g-#{messageColSize}"></div>
+            <div class="ui-g-#{inputColSize}">
+                <c:forEach var="value" items="#{variantData.yRange.listRepresentation}">
+                    <p:selectBooleanCheckbox itemLabel="#{value}" value="#{app.editor.y[value]}" />
+                </c:forEach>
+            </div>
+        </div>
+
+        <div class="ui-g">
+            <div class="ui-g-#{fieldNameColSize}">R</div>
+            <div class="ui-g-#{messageColSize}"></div>
+            <div class="ui-g-#{inputColSize}">
+                <p:selectOneMenu value="#{app.editor.r}">
+                    <c:forEach var="value" items="#{variantData.rRange.listRepresentation}">
+                        <f:selectItem itemLabel="#{value}" itemValue="#{value}"/>
+                    </c:forEach>
+                </p:selectOneMenu>
+            </div>
+        </div>
+
+        <p:commandButton value="submit" validateClient="true" action="#{app.ok}"/>
+    </h:form>
+
+    <p:commandButton value="Submit" icon="pi pi-check" update="display" oncomplete="PF('dlg').show()" />
+    <p:dialog header="Values" modal="true" resizable="false" showEffect="fade" widgetVar="dlg">
+        <h:panelGrid columns="1" id="display">
+            <h:outputText value="#{app.editor.x}" />
+            <h:outputText value="#{app.editor.y}" />
+            <h:outputText value="#{app.editor.r}" />
+        </h:panelGrid>
+    </p:dialog>
+</h:body>
+
+</html>

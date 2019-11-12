@@ -27,6 +27,7 @@
                              second="#{clock.now.second}"
         />
         <p:poll interval="3" listener="#{clock.updateNow}" update="clock-displayer"/>
+        <h:commandButton action="app" value="To the app"/>
     </h:form>
 </h:body>
 </html>
