@@ -1,0 +1,8 @@
+.idea/workspace.xml
+out/*
+
+lib/*
+!lib/.gitkeep
+
+web/WEB-INF/lib/*
+!web/WEB-INF/lib/.gitkeep
