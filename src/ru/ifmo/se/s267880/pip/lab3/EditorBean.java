@@ -1,7 +1,7 @@
 package ru.ifmo.se.s267880.pip.lab3;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class EditorBean {
     private Double x;
@@ -9,6 +9,18 @@ public class EditorBean {
     private double r;
 
     public EditorBean() {}
+
+    public List<Query> generateQueries() {
+        if (x == null) {
+            return Collections.emptyList();
+        }
+
+        return y.entrySet()
+                .stream()
+                .filter(Map.Entry::getValue)
+                .map(entry -> new Query(x, entry.getKey(), r))
+                .collect(Collectors.toList());
+    }
 
     public Double getX() {
         return x;
