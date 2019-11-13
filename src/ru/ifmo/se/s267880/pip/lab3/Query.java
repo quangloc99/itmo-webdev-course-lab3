@@ -1,12 +1,22 @@
 package ru.ifmo.se.s267880.pip.lab3;
 
+import javax.persistence.*;
 import java.io.Serializable;
 
+@Entity
+@Table
 public class Query implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private double x;
     private double y;
     private double r;
-    private Boolean result = null;
+    @Transient
+    private Boolean hit = null;
+
+    public Query() {
+    }
 
     public Query(double x, double y, double r) {
         this.x = x;
@@ -14,8 +24,8 @@ public class Query implements Serializable {
         this.r = r;
     }
 
-    boolean getResult() {
-        if (result != null) return result;
+    boolean isHit() {
+        if (hit != null) return hit;
 
         // TODO check the result
         return false;
@@ -24,10 +34,15 @@ public class Query implements Serializable {
     @Override
     public String toString() {
         return "Query{" +
-                "x=" + x +
+                "id=" + id +
+                ", x=" + x +
                 ", y=" + y +
                 ", r=" + r +
                 '}';
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public double getX() {
