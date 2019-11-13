@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+>
+
+<composite:interface>
+    <composite:attribute name="maxR" required="true"/>
+    <composite:attribute name="r" required="true"/>
+    <composite:attribute name="width" default="300"/>
+    <composite:attribute name="height" default="300"/>
+    <composite:attribute name="fill" default="yellow"/>
+</composite:interface>
+
+<composite:implementation>
+    <svg width="#{cc.attrs.width}" height="#{cc.attrs.height}"
+         viewBox="-100 -100 200 200"
+         xmlns="http://www.w3.org/2000/svg"
+         style="
+             transform: scale(1, -1);
+             border: 1px solid black;
+             --unit: calc(100px / #{cc.attrs.maxR});
+             --r: calc(var(--unit) * #{cc.attrs.r});
+             --half-r: calc(var(--r) / 2);
+             --fill-color: #{cc.attrs.fill};
+             --sqrt2: 1.41421356237;
+        "
+    >
+        <rect x="0" y="0" style="
+            width: var(--r);
+            height: var(--half-r);
+            fill: var(--fill-color);
+        "/>
+
+        <circle cx="0" cy="0" clip-path="inset(0px 0px 50% 50%) " style="
+            r: var(--half-r);
+            fill: var(--fill-color);
+        "/>
+
+        <g clip-path="inset(0px 50% 50% 0px)">
+            <rect  style="
+                x: calc(0px - var(--half-r));
+                y: calc(0px - var(--half-r));
+                width: var(--r);
+                height: var(--r);
+                fill: var(--fill-color);
+                transform: scale(0.5, 1) rotate(45deg) scale(var(--sqrt2));
+            "/>
+        </g>
+
+        <line x1="-100" y1="0" x2="100" y2="0" stroke="black" stroke-width="2" />
+        <line x1="0" y1="-100" x2="0" y2="100" stroke="black" stroke-width="2" />
+
+        <composite:insertChildren/>
+
+    </svg>
+</composite:implementation>
+</html>
