@@ -6,13 +6,21 @@
       xmlns:c="http://java.sun.com/jstl/core"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:custom="http://java.sun.com/jsf/composite/custom-components"
 >
 <h:head>
-
+    <h:outputStylesheet name="css/animation.css"/>
 </h:head>
 
 <h:body>
     <h:form>
+        <h:panelGroup id="input-animation-values">
+            <style type="text/css">
+                :root {
+                    --input-ani-r: #{app.editor.r};
+                }
+            </style>
+        </h:panelGroup>
         <c:set var="fieldNameColSize" value="2"/>
         <c:set var="inputColSize" value="4"/>
         <c:set var="messageColSize" value="6"/>
@@ -54,6 +62,8 @@
                     <c:forEach var="val" items="#{variantData.rRange.listRepresentation}">
                         <f:selectItem itemLabel="#{val}" itemValue="#{val}"/>
                     </c:forEach>
+
+                    <p:ajax event="change" update="input-animation-values" />
                 </p:selectOneMenu>
             </div>
         </div>
@@ -64,6 +74,10 @@
                          actionListener="#{app.addGeneratedQueriesToDB}"
                          update="input-x-message, generated-queries, all-queries"/>
     </h:form>
+
+    <custom:hitting-area-graph-template r="var(--input-ani-r)" maxR="7" fill="red">
+
+    </custom:hitting-area-graph-template>
 
     <br/>
     <p:commandButton value="delete"  actionListener="#{app.deleteAllQueries}" update="all-queries">
