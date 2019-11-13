@@ -10,7 +10,7 @@ public class EditorBean {
 
     public EditorBean() {}
 
-    public List<Query> generateQueries() {
+    public List<CheckingHitQuery> generateQueries() {
         if (x == null) {
             return Collections.emptyList();
         }
@@ -18,7 +18,7 @@ public class EditorBean {
         return y.entrySet()
                 .stream()
                 .filter(Map.Entry::getValue)
-                .map(entry -> new Query(x, entry.getKey(), r))
+                .map(entry -> new CheckingHitQuery(x, entry.getKey(), r))
                 .collect(Collectors.toList());
     }
 

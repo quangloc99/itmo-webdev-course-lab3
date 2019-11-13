@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 @Entity
 @Table
-public class Query implements Serializable {
+public class CheckingHitQuery implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -15,10 +15,10 @@ public class Query implements Serializable {
     @Transient
     private Boolean hit = null;
 
-    public Query() {
+    public CheckingHitQuery() {
     }
 
-    public Query(double x, double y, double r) {
+    public CheckingHitQuery(double x, double y, double r) {
         this.x = x;
         this.y = y;
         this.r = r;
@@ -33,7 +33,7 @@ public class Query implements Serializable {
 
     @Override
     public String toString() {
-        return "Query{" +
+        return "CheckingHitQuery{" +
                 "id=" + id +
                 ", x=" + x +
                 ", y=" + y +

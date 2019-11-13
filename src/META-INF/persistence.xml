@@ -3,7 +3,7 @@
 
     <persistence-unit name="Eclipselink_JPA" transaction-type="RESOURCE_LOCAL">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-        <class>ru.ifmo.se.s267880.pip.lab3.Query</class>
+        <class>ru.ifmo.se.s267880.pip.lab3.CheckingHitQuery</class>
         <properties>
             <property name="eclipselink.jdbc.url" value="jdbc:postgresql://localhost:5432/postgres"/>
             <property name="eclipselink.jdbc.driver" value="org.postgresql.Driver"/>
