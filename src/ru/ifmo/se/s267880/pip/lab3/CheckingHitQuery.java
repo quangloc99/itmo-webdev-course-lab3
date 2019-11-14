@@ -29,9 +29,9 @@ public class CheckingHitQuery implements Serializable {
     public boolean isHit() {
         if (hit != null) return hit;
 
-        if (y <= 0 && x >= 0) return hit = x * x + y * y <= r * r + eps;
         if (x >= 0 && y >= 0) return hit = x <= r + eps && y <= r / 2 + eps;
-        if (x <= 0 && y <= 0) return hit = 2 * x + (-y) >= -r;
+        if (y <= 0 && x >= 0) return hit = x * x + y * y <= r * r / 4 + eps;
+        if (x <= 0 && y <= 0) return hit = 2 * x + y >= -r - eps;
 
         return hit = false;
     }
