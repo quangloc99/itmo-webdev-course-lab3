@@ -50,91 +50,108 @@
         </style>
     </h:panelGroup>
 
-    <h:form>
-        <c:set var="fieldNameColSize" value="2"/>
-        <c:set var="inputColSize" value="4"/>
-        <c:set var="messageColSize" value="6"/>
+    <c:set var="contentColSize" value="8"/>
+    <c:set var="graphColSize" value="4"/>
 
-        <div class="ui-g">
-            <div class="ui-g-#{fieldNameColSize}">X</div>
-            <div class="ui-g-#{messageColSize}">
-                <h:message id="input-x-message" for="input-x"/>
-            </div>
-            <div class="ui-g-#{inputColSize}">
-                <p:inputText id="input-x" value="#{app.editor.x}"
-                             required="true"
-                             requiredMessage="field required"
-                             converterMessage="must be number between #{variantData.xRange.low} and #{variantData.xRange.high}"
-                             validatorMessage="must be number between #{variantData.xRange.low} and #{variantData.xRange.high}"
-                >
-                    <f:validateDoubleRange minimum="#{variantData.xRange.low}" maximum="#{variantData.xRange.high}"/>
-                    <f:converter converterId="javax.faces.Double" />
-                    <p:ajax event="keyup" update="input-x-message, input-animation-values" validateClient="true"/>
-                </p:inputText>
-            </div>
+    <div class="ui-g">
+        <div class="ui-g-#{contentColSize} ui-g-nopad">
+            <h:form>
+                <c:set var="fieldNameColSize" value="1"/>
+                <c:set var="messageColSize" value="3"/>
+                <c:set var="inputColSize" value="8"/>
+
+                <div class="ui-g">
+                    <div class="ui-g-#{fieldNameColSize}">X</div>
+                    <div class="ui-g-#{messageColSize}">
+                        <h:message id="input-x-message" for="input-x"/>
+                    </div>
+                    <div class="ui-g-#{inputColSize}">
+                        <p:inputText id="input-x" value="#{app.editor.x}"
+                                     required="true"
+                                     requiredMessage="field required"
+                                     converterMessage="must be number between #{variantData.xRange.low} and #{variantData.xRange.high}"
+                                     validatorMessage="must be number between #{variantData.xRange.low} and #{variantData.xRange.high}"
+                        >
+                            <f:validateDoubleRange minimum="#{variantData.xRange.low}" maximum="#{variantData.xRange.high}"/>
+                            <f:converter converterId="javax.faces.Double" />
+                            <p:ajax event="keyup" update="input-x-message, input-animation-values" validateClient="true"/>
+                        </p:inputText>
+                    </div>
+                </div>
+
+                <div class="ui-g">
+                    <div class="ui-g-#{fieldNameColSize}">Y</div>
+                    <div class="ui-g-#{messageColSize}"></div>
+                    <div class="ui-g-#{inputColSize}">
+                        <c:forEach var="val" items="#{variantData.yRange.listRepresentation}">
+                            <p:selectBooleanCheckbox itemLabel="#{val}" value="#{app.editor.y[val]}">
+                                <p:ajax update="input-animation-values"/>
+                            </p:selectBooleanCheckbox>
+                        </c:forEach>
+                    </div>
+                </div>
+
+                <div class="ui-g">
+                    <div class="ui-g-#{fieldNameColSize}">R</div>
+                    <div class="ui-g-#{messageColSize}"></div>
+                    <div class="ui-g-#{inputColSize}">
+                        <p:selectOneMenu value="#{app.editor.r}">
+                            <c:forEach var="val" items="#{variantData.rRange.listRepresentation}">
+                                <f:selectItem itemLabel="#{val}" itemValue="#{val}"/>
+                            </c:forEach>
+
+                            <p:ajax update="input-animation-values" />
+                        </p:selectOneMenu>
+                    </div>
+                </div>
+
+                <p:commandButton value="submit"
+                                 actionListener="#{app.addGeneratedQueriesToDB}"
+                                 update="input-x-message, queries-table, output-animation-values"/>
+
+                <p:commandButton value="delete" actionListener="#{app.deleteAllQueries}" update="queries-table, output-animation-values"/>
+            </h:form>
         </div>
 
-        <div class="ui-g">
-            <div class="ui-g-#{fieldNameColSize}">Y</div>
-            <div class="ui-g-#{messageColSize}"></div>
-            <div class="ui-g-#{inputColSize}">
+        <div class="ui-g-#{graphColSize}">
+            <custom:hitting-area-graph-template r="var(--input-ani-r)" maxR="6" fill="red" width="300" height="300">
                 <c:forEach var="val" items="#{variantData.yRange.listRepresentation}">
-                    <p:selectBooleanCheckbox itemLabel="#{val}" value="#{app.editor.y[val]}">
-                        <p:ajax update="input-animation-values"/>
-                    </p:selectBooleanCheckbox>
+                    <custom:hitting-area-point x="var(--input-ani-x)" y="#{val}"
+                                               id="input-point-for_#{val.toString().replace('.', '-')}"/>
                 </c:forEach>
-            </div>
+            </custom:hitting-area-graph-template>
         </div>
+    </div>
 
-        <div class="ui-g">
-            <div class="ui-g-#{fieldNameColSize}">R</div>
-            <div class="ui-g-#{messageColSize}"></div>
-            <div class="ui-g-#{inputColSize}">
-                <p:selectOneMenu value="#{app.editor.r}">
-                    <c:forEach var="val" items="#{variantData.rRange.listRepresentation}">
-                        <f:selectItem itemLabel="#{val}" itemValue="#{val}"/>
-                    </c:forEach>
-
-                    <p:ajax update="input-animation-values" />
-                </p:selectOneMenu>
-            </div>
+    <div class="ui-g">
+        <div class="ui-g-#{contentColSize}">
+            <p:dataTable id="queries-table"
+                         value="#{app.allQueries}"
+                         var="o"
+                         rowStyleClass="#{app.displayingQuery.id eq o.id ? 'selected-row' : ''}"
+            >
+                <p:column headerText="Click to display">
+                    <p:commandButton value="display" update="queries-table, output-animation-values">
+                        <f:setPropertyActionListener target="#{app.displayingQuery}" value="#{o}"/>
+                    </p:commandButton>
+                </p:column>
+                <p:column headerText="x"> #{o.x} </p:column>
+                <p:column headerText="y"> #{o.y} </p:column>
+                <p:column headerText="r"> #{o.r} </p:column>
+                <p:column headerText="Result"> #{o.hit} </p:column>
+            </p:dataTable>
         </div>
+        <div class="ui-g-#{graphColSize}">
+            <h:panelGroup id="output-graph-wrapper" layout="block">
+                <custom:hitting-area-graph-template r="var(--output-r)" maxR="6" fill="var(--output-fill-color)">
+                    <custom:hitting-area-point x="var(--output-x)" y="var(--output-y)" fill="blue"/>
+                </custom:hitting-area-graph-template>
+            </h:panelGroup>
 
-        <p:commandButton value="submit"
-                         actionListener="#{app.addGeneratedQueriesToDB}"
-                         update="input-x-message, queries-table, output-animation-values"/>
+        </div>
+    </div>
 
-        <br/>
-        <p:commandButton value="delete" actionListener="#{app.deleteAllQueries}" update="queries-table, output-animation-values"/>
-
-    </h:form>
-
-    <custom:hitting-area-graph-template r="var(--input-ani-r)" maxR="6" fill="red" width="300" height="300">
-        <c:forEach var="val" items="#{variantData.yRange.listRepresentation}">
-            <custom:hitting-area-point x="var(--input-ani-x)" y="#{val}"
-                                       id="input-point-for_#{val.toString().replace('.', '-')}"/>
-        </c:forEach>
-    </custom:hitting-area-graph-template>
-
-    <custom:hitting-area-graph-template r="var(--output-r)" maxR="6" fill="var(--output-fill-color)">
-        <custom:hitting-area-point x="var(--output-x)" y="var(--output-y)" fill="blue"/>
-    </custom:hitting-area-graph-template>
-
-    <p:dataTable id="queries-table"
-                 value="#{app.allQueries}"
-                 var="o"
-                 rowStyleClass="#{app.displayingQuery.id eq o.id ? 'selected-row' : ''}"
-    >
-        <p:column headerText="Click to display">
-            <p:commandButton value="display" update="queries-table, output-animation-values">
-                <f:setPropertyActionListener target="#{app.displayingQuery}" value="#{o}"/>
-            </p:commandButton>
-        </p:column>
-        <p:column headerText="x"> #{o.x} </p:column>
-        <p:column headerText="y"> #{o.y} </p:column>
-        <p:column headerText="r"> #{o.r} </p:column>
-        <p:column headerText="Result"> #{o.hit} </p:column>
-    </p:dataTable>
+    <p:sticky target="output-graph-wrapper" />
 
 </h:body>
 
