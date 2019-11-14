@@ -2,6 +2,7 @@ package ru.ifmo.se.s267880.pip.lab3;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import static ru.ifmo.se.s267880.utils.Math.eps;
 
 @Entity
 @Table
@@ -28,8 +29,11 @@ public class CheckingHitQuery implements Serializable {
     public boolean isHit() {
         if (hit != null) return hit;
 
-        // TODO check the result
-        return false;
+        if (y <= 0 && x >= 0) return hit = x * x + y * y <= r * r + eps;
+        if (x >= 0 && y >= 0) return hit = x <= r + eps && y <= r / 2 + eps;
+        if (x <= 0 && y <= 0) return hit = 2 * x + (-y) >= -r;
+
+        return hit = false;
     }
 
     @Override
