@@ -1,0 +1,28 @@
+body {
+    padding: 10px;
+    padding-top: 0;
+    margin: 0 auto;
+    max-width: 1500px;
+    font-family: latoregular, Arial, Helvetica, sans-serif;
+}
+
+.input-field-container {
+    height: 70px;
+}
+
+svg *, tr{
+    transition: all 0.5s ease;
+}
+
+tr {
+    text-align: center;
+}
+
+.selected-row {
+    background-color: #56b0de !important;
+    color: white;
+}
+
+.error-message {
+    color: red;
+}

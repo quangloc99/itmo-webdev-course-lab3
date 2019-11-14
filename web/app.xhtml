@@ -9,16 +9,24 @@
       xmlns:custom="http://java.sun.com/jsf/composite/custom-components"
 >
 <h:head>
-    <h:outputStylesheet name="css/animation.css"/>
-    <style>
-        /* TODO add this to a css file */
-        .selected-row {
-            background-color: #059eff !important;
-        }
-    </style>
+    <h:outputStylesheet name="css/app.css"/>
+    <h:outputStylesheet name="css/primeflex.css"/>
 </h:head>
 
 <h:body>
+    <div style="background: #4e6c6d; color: white; display: block; padding: 10px">
+        <div class="p-grid" >
+            <div class="p-col" style="text-align: left; font-size: 30px;">
+                3th lab - Web programming
+            </div>
+
+            <div class="p-col" style="text-align: right;">
+                Tran Quang Loc<br/>
+                P3200
+            </div>
+        </div>
+    </div>
+
     <h:panelGroup id="input-animation-values">
         <style type="text/css">
             :root {
@@ -50,22 +58,18 @@
         </style>
     </h:panelGroup>
 
-    <c:set var="contentColSize" value="8"/>
-    <c:set var="graphColSize" value="4"/>
-
-    <div class="ui-g">
-        <div class="ui-g-#{contentColSize} ui-g-nopad">
+    <h2>Input form and interactive input</h2>
+    <div class="p-grid">
+        <div class="p-col">
             <h:form>
-                <c:set var="fieldNameColSize" value="1"/>
-                <c:set var="messageColSize" value="3"/>
-                <c:set var="inputColSize" value="8"/>
 
-                <div class="ui-g">
-                    <div class="ui-g-#{fieldNameColSize}">X</div>
-                    <div class="ui-g-#{messageColSize}">
-                        <h:message id="input-x-message" for="input-x"/>
+                <div class="p-grid input-field-container">
+
+                    <div class="p-col"><p:outputLabel for="input-x" value="X:"/></div>
+                    <div class="p-col">
+                        <h:message id="input-x-message" for="input-x" styleClass="error-message"/>
                     </div>
-                    <div class="ui-g-#{inputColSize}">
+                    <div class="p-col-8">
                         <p:inputText id="input-x" value="#{app.editor.x}"
                                      required="true"
                                      requiredMessage="field required"
@@ -79,10 +83,10 @@
                     </div>
                 </div>
 
-                <div class="ui-g">
-                    <div class="ui-g-#{fieldNameColSize}">Y</div>
-                    <div class="ui-g-#{messageColSize}"></div>
-                    <div class="ui-g-#{inputColSize}">
+                <div class="p-grid input-field-container">
+                    <div class="p-col"><p:outputLabel value="Y:"/></div>
+                    <div class="p-col"></div>
+                    <div class="p-col-8">
                         <c:forEach var="val" items="#{variantData.yRange.listRepresentation}">
                             <p:selectBooleanCheckbox itemLabel="#{val}" value="#{app.editor.y[val]}">
                                 <p:ajax update="input-animation-values"/>
@@ -91,11 +95,11 @@
                     </div>
                 </div>
 
-                <div class="ui-g">
-                    <div class="ui-g-#{fieldNameColSize}">R</div>
-                    <div class="ui-g-#{messageColSize}"></div>
-                    <div class="ui-g-#{inputColSize}">
-                        <p:selectOneMenu value="#{app.editor.r}">
+                <div class="p-grid input-field-container">
+                    <div class="p-col"><p:outputLabel for="input-r" value="R: "/></div>
+                    <div class="p-col"></div>
+                    <div class="p-col-8">
+                        <p:selectOneMenu id="input-r" value="#{app.editor.r}">
                             <c:forEach var="val" items="#{variantData.rRange.listRepresentation}">
                                 <f:selectItem itemLabel="#{val}" itemValue="#{val}"/>
                             </c:forEach>
@@ -109,12 +113,11 @@
                                  actionListener="#{app.addGeneratedQueriesToDB}"
                                  update="input-x-message, queries-table, output-animation-values"/>
 
-                <p:commandButton value="delete" actionListener="#{app.deleteAllQueries}" update="queries-table, output-animation-values"/>
             </h:form>
         </div>
 
-        <div class="ui-g-#{graphColSize}">
-            <custom:hitting-area-graph-template r="var(--input-ani-r)" maxR="6" fill="red" width="300" height="300">
+        <div class="p-col-fixed" style="text-align: center; width: 375px;">
+            <custom:hitting-area-graph-template r="var(--input-ani-r)" maxR="6" fill="red" width="350" height="350">
                 <c:forEach var="val" items="#{variantData.yRange.listRepresentation}">
                     <custom:hitting-area-point x="var(--input-ani-x)" y="#{val}"
                                                id="input-point-for_#{val.toString().replace('.', '-')}"/>
@@ -123,15 +126,19 @@
         </div>
     </div>
 
-    <div class="ui-g">
-        <div class="ui-g-#{contentColSize}">
+    <h2>Queries result</h2>
+    <p:commandButton value="Clear all queries" actionListener="#{app.deleteAllQueries}" update="queries-table, output-animation-values"/>
+    <br/>
+    <div class="p-grid">
+        <div class="p-col">
             <p:dataTable id="queries-table"
                          value="#{app.allQueries}"
                          var="o"
                          rowStyleClass="#{app.displayingQuery.id eq o.id ? 'selected-row' : ''}"
+                         stickyHeader="true"
             >
-                <p:column headerText="Click to display">
-                    <p:commandButton value="display" update="queries-table, output-animation-values">
+                <p:column headerText=" ">
+                    <p:commandButton value="Show" update="queries-table, output-animation-values">
                         <f:setPropertyActionListener target="#{app.displayingQuery}" value="#{o}"/>
                     </p:commandButton>
                 </p:column>
@@ -141,9 +148,13 @@
                 <p:column headerText="Result"> #{o.hit} </p:column>
             </p:dataTable>
         </div>
-        <div class="ui-g-#{graphColSize}">
+        <div class="p-col-fixed" style="text-align: center; width: 375px;">
             <h:panelGroup id="output-graph-wrapper" layout="block">
-                <custom:hitting-area-graph-template r="var(--output-r)" maxR="6" fill="var(--output-fill-color)">
+                <custom:hitting-area-graph-template r="var(--output-r)"
+                                                    maxR="6"
+                                                    fill="var(--output-fill-color)"
+                                                    width="350" height="350"
+                >
                     <custom:hitting-area-point x="var(--output-x)" y="var(--output-y)" fill="blue"/>
                 </custom:hitting-area-graph-template>
             </h:panelGroup>
