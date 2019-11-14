@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 public class EditorBean {
     private Double x;
-    private Map<Double, Boolean> y = new HashMap<>();
+    private Map<Double, Boolean> y = new TreeMap<>();
     private double r;
 
     public EditorBean() {}
