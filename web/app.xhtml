@@ -10,6 +10,12 @@
 >
 <h:head>
     <h:outputStylesheet name="css/animation.css"/>
+    <style>
+        /* TODO add this to a css file */
+        .selected-row {
+            background-color: #059eff !important;
+        }
+    </style>
 </h:head>
 
 <h:body>
@@ -83,11 +89,13 @@
             </div>
         </div>
 
-        <h:outputText id="generated-queries" value="Corresponding queries: #{app.editor.generateQueries()}"/>
-        <br/>
         <p:commandButton value="submit"
                          actionListener="#{app.addGeneratedQueriesToDB}"
-                         update="input-x-message, generated-queries, all-queries"/>
+                         update="input-x-message, queries-table"/>
+
+        <br/>
+        <p:commandButton value="delete"  actionListener="#{app.deleteAllQueries}" update="queries-table"/>
+
     </h:form>
 
     <custom:hitting-area-graph-template r="var(--input-ani-r)" maxR="6" fill="red" width="500" height="500">
@@ -97,26 +105,22 @@
         </c:forEach>
     </custom:hitting-area-graph-template>
 
-    <br/>
-    <p:commandButton value="delete"  actionListener="#{app.deleteAllQueries}" update="all-queries">
-    </p:commandButton>
-    <br/>
-    <p:commandButton value="Submit" icon="pi pi-check" update="display" oncomplete="PF('dlg').show()" />
+    <p:dataTable id="queries-table"
+                 value="#{app.allQueries}"
+                 var="o"
+                 rowStyleClass="#{app.displayingQuery.id eq o.id ? 'selected-row' : ''}"
+    >
+        <p:column headerText="Click to display">
+            <p:commandButton value="display" update="queries-table">
+                <f:setPropertyActionListener target="#{app.displayingQuery}" value="#{o}"/>
+            </p:commandButton>
+        </p:column>
+        <p:column headerText="x"> #{o.x} </p:column>
+        <p:column headerText="y"> #{o.y} </p:column>
+        <p:column headerText="r"> #{o.r} </p:column>
+        <p:column headerText="Result"> #{o.hit} </p:column>
+    </p:dataTable>
 
-
-    <p:dialog header="Values" modal="true" resizable="false" showEffect="fade" widgetVar="dlg">
-        <h:panelGrid columns="1" id="display">
-            <h:outputText value="#{app.editor.x}" />
-            <h:outputText value="#{app.editor.y}" />
-            <h:outputText value="#{app.editor.r}" />
-        </h:panelGrid>
-    </p:dialog>
-
-    <h:panelGroup id="all-queries" layout="block">
-        <ui:repeat value="#{app.allQueries}" var="que">
-            <h:outputText value="#{que}"/><br/>
-        </ui:repeat>
-    </h:panelGroup>
 </h:body>
 
 </html>

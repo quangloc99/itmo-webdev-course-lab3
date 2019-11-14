@@ -24,7 +24,8 @@ public class CheckingHitQuery implements Serializable {
         this.r = r;
     }
 
-    boolean isHit() {
+    // this getter is for JPA
+    public boolean isHit() {
         if (hit != null) return hit;
 
         // TODO check the result
