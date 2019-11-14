@@ -18,8 +18,21 @@
             <style type="text/css">
                 :root {
                     --input-ani-r: #{app.editor.r};
+                    --input-ani-x: #{app.editor.x};
+                }
+
+                svg [id^=input-point-for] {
+                    opacity: 0;
                 }
             </style>
+
+            <ui:repeat var="val" value="#{app.editor.generateQueries()}">
+                <style>
+                    #input-point-for_#{val.y.toString().replace('.', '-')} {
+                        opacity: 1;
+                    }
+                </style>
+            </ui:repeat>
         </h:panelGroup>
         <c:set var="fieldNameColSize" value="2"/>
         <c:set var="inputColSize" value="4"/>
@@ -39,7 +52,7 @@
                 >
                     <f:validateDoubleRange minimum="#{variantData.xRange.low}" maximum="#{variantData.xRange.high}"/>
                     <f:converter converterId="javax.faces.Double" />
-                    <p:ajax event="keyup" update="input-x-message" validateClient="true"/>
+                    <p:ajax event="keyup" update="input-x-message, input-animation-values" validateClient="true"/>
                 </p:inputText>
             </div>
         </div>
@@ -49,7 +62,9 @@
             <div class="ui-g-#{messageColSize}"></div>
             <div class="ui-g-#{inputColSize}">
                 <c:forEach var="val" items="#{variantData.yRange.listRepresentation}">
-                    <p:selectBooleanCheckbox itemLabel="#{val}" value="#{app.editor.y[val]}" />
+                    <p:selectBooleanCheckbox itemLabel="#{val}" value="#{app.editor.y[val]}">
+                        <p:ajax update="input-animation-values"/>
+                    </p:selectBooleanCheckbox>
                 </c:forEach>
             </div>
         </div>
@@ -63,7 +78,7 @@
                         <f:selectItem itemLabel="#{val}" itemValue="#{val}"/>
                     </c:forEach>
 
-                    <p:ajax event="change" update="input-animation-values" />
+                    <p:ajax update="input-animation-values" />
                 </p:selectOneMenu>
             </div>
         </div>
@@ -75,8 +90,11 @@
                          update="input-x-message, generated-queries, all-queries"/>
     </h:form>
 
-    <custom:hitting-area-graph-template r="var(--input-ani-r)" maxR="7" fill="red">
-
+    <custom:hitting-area-graph-template r="var(--input-ani-r)" maxR="6" fill="red" width="500" height="500">
+        <c:forEach var="val" items="#{variantData.yRange.listRepresentation}">
+            <custom:hitting-area-point x="var(--input-ani-x)" y="#{val}"
+                                       id="input-point-for_#{val.toString().replace('.', '-')}"/>
+        </c:forEach>
     </custom:hitting-area-graph-template>
 
     <br/>

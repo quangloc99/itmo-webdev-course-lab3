@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="primefaces-delta">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/tools/primeface-theme/delta-1.0.10.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
