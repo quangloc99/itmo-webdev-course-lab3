@@ -19,27 +19,38 @@
 </h:head>
 
 <h:body>
-    <h:form>
-        <h:panelGroup id="input-animation-values">
-            <style type="text/css">
-                :root {
-                    --input-ani-r: #{app.editor.r};
-                    --input-ani-x: #{app.editor.x};
-                }
+    <h:panelGroup id="input-animation-values">
+        <style type="text/css">
+            :root {
+                --input-ani-r: #{app.editor.r};
+                --input-ani-x: #{app.editor.x};
+            }
 
-                svg [id^=input-point-for] {
-                    opacity: 0;
+            svg [id^=input-point-for] {
+                opacity: 0;
+            }
+        </style>
+
+        <ui:repeat var="val" value="#{app.editor.generateQueries()}">
+            <style>
+                #input-point-for_#{val.y.toString().replace('.', '-')} {
+                    opacity: 1;
                 }
             </style>
+        </ui:repeat>
+    </h:panelGroup>
+    <h:panelGroup id="output-animation-values">
+        <style>
+            :root {
+                --output-r: #{app.displayingQuery eq null ? 0 : app.displayingQuery.r};
+                --output-x: #{app.displayingQuery eq null ? 0 : app.displayingQuery.x};
+                --output-y: #{app.displayingQuery eq null ? 0 : app.displayingQuery.y};
+                --output-fill-color: #{app.displayingQuery eq null ? "black" : app.displayingQuery.hit ? "green" : "red"};
+            }
+        </style>
+    </h:panelGroup>
 
-            <ui:repeat var="val" value="#{app.editor.generateQueries()}">
-                <style>
-                    #input-point-for_#{val.y.toString().replace('.', '-')} {
-                        opacity: 1;
-                    }
-                </style>
-            </ui:repeat>
-        </h:panelGroup>
+    <h:form>
         <c:set var="fieldNameColSize" value="2"/>
         <c:set var="inputColSize" value="4"/>
         <c:set var="messageColSize" value="6"/>
@@ -91,18 +102,22 @@
 
         <p:commandButton value="submit"
                          actionListener="#{app.addGeneratedQueriesToDB}"
-                         update="input-x-message, queries-table"/>
+                         update="input-x-message, queries-table, output-animation-values"/>
 
         <br/>
-        <p:commandButton value="delete"  actionListener="#{app.deleteAllQueries}" update="queries-table"/>
+        <p:commandButton value="delete" actionListener="#{app.deleteAllQueries}" update="queries-table, output-animation-values"/>
 
     </h:form>
 
-    <custom:hitting-area-graph-template r="var(--input-ani-r)" maxR="6" fill="red" width="500" height="500">
+    <custom:hitting-area-graph-template r="var(--input-ani-r)" maxR="6" fill="red" width="300" height="300">
         <c:forEach var="val" items="#{variantData.yRange.listRepresentation}">
             <custom:hitting-area-point x="var(--input-ani-x)" y="#{val}"
                                        id="input-point-for_#{val.toString().replace('.', '-')}"/>
         </c:forEach>
+    </custom:hitting-area-graph-template>
+
+    <custom:hitting-area-graph-template r="var(--output-r)" maxR="6" fill="var(--output-fill-color)">
+        <custom:hitting-area-point x="var(--output-x)" y="var(--output-y)" fill="blue"/>
     </custom:hitting-area-graph-template>
 
     <p:dataTable id="queries-table"
@@ -111,7 +126,7 @@
                  rowStyleClass="#{app.displayingQuery.id eq o.id ? 'selected-row' : ''}"
     >
         <p:column headerText="Click to display">
-            <p:commandButton value="display" update="queries-table">
+            <p:commandButton value="display" update="queries-table, output-animation-values">
                 <f:setPropertyActionListener target="#{app.displayingQuery}" value="#{o}"/>
             </p:commandButton>
         </p:column>

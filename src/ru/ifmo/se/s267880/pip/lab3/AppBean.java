@@ -43,6 +43,7 @@ public class AppBean implements Serializable {
             allQueries.addFirst(query);
             checkHitQueryManager.persist(query);
         });
+        displayingQuery = allQueries.get(0);
         checkHitQueryManager.getTransaction().commit();
     }
 
