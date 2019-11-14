@@ -30,7 +30,7 @@
     <p:outputPanel id="input-animation-values">
         <style type="text/css">
             :root {
-                --input-ani-r: #{app.editor.r};
+                --input-ani-r: #{app.editor.r eq null ? 0 : app.editor.r};
                 --input-ani-x: #{app.editor.x eq null ? 0 : app.editor.x};
             }
 
@@ -97,21 +97,24 @@
 
                 <div class="p-grid input-field-container">
                     <div class="p-col"><p:outputLabel for="input-r" value="R: "/></div>
-                    <div class="p-col"></div>
+                    <div class="p-col">
+                        <h:message id="input-r-message" for="input-r" styleClass="error-message"/>
+                    </div>
                     <div class="p-col-8">
-                        <p:selectOneMenu id="input-r" value="#{app.editor.r}">
+                        <p:selectOneMenu id="input-r" value="#{app.editor.r}" required="true" requiredMessage="field required">
+                            <f:selectItem itemValue="#{null}" itemLabel="--select--" itemDisabled="#{app.editor.r ne null}" />
                             <c:forEach var="val" items="#{variantData.rRange.listRepresentation}">
                                 <f:selectItem itemLabel="#{val}" itemValue="#{val}"/>
                             </c:forEach>
 
-                            <p:ajax update="input-animation-values" />
+                            <p:ajax update="input-animation-values, input-r-message" />
                         </p:selectOneMenu>
                     </div>
                 </div>
 
                 <p:commandButton value="submit"
                                  actionListener="#{app.addGeneratedQueriesToDB}"
-                                 update="input-x-message, queries-table, output-animation-values"/>
+                                 update="input-x-message, input-r-message, queries-table, output-animation-values"/>
 
             </h:form>
         </div>

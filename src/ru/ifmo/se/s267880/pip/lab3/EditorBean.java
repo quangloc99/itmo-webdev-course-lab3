@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 public class EditorBean {
     private Double x;
     private Map<Double, Boolean> y = new TreeMap<>();
-    private double r;
+    private Double r;
     private List<CheckingHitQuery> generatedQueries;
 
     public EditorBean() {}
@@ -38,11 +38,11 @@ public class EditorBean {
         return y;
     }
 
-    public double getR() {
+    public Double getR() {
         return r;
     }
 
-    public void setR(double r) {
+    public void setR(Double r) {
         generatedQueries = null;
         this.r = r;
     }
