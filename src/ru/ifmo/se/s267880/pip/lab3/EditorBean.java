@@ -7,15 +7,17 @@ public class EditorBean {
     private Double x;
     private Map<Double, Boolean> y = new TreeMap<>();
     private double r;
+    private List<CheckingHitQuery> generatedQueries;
 
     public EditorBean() {}
 
-    public List<CheckingHitQuery> generateQueries() {
+    public List<CheckingHitQuery> getGeneratedQueries() {
+        if (generatedQueries != null) return generatedQueries;
         if (x == null) {
-            return Collections.emptyList();
+            return generatedQueries = Collections.emptyList();
         }
 
-        return y.entrySet()
+        return generatedQueries = y.entrySet()
                 .stream()
                 .filter(Map.Entry::getValue)
                 .map(entry -> new CheckingHitQuery(x, entry.getKey(), r))
@@ -27,10 +29,12 @@ public class EditorBean {
     }
 
     public void setX(Double x) {
+        generatedQueries = null;
         this.x = x;
     }
 
     public Map<Double, Boolean> getY() {
+        generatedQueries = null;
         return y;
     }
 
@@ -39,6 +43,7 @@ public class EditorBean {
     }
 
     public void setR(double r) {
+        generatedQueries = null;
         this.r = r;
     }
 }

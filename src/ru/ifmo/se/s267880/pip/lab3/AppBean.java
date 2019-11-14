@@ -39,7 +39,7 @@ public class AppBean implements Serializable {
 
     public void addGeneratedQueriesToDB() {
         checkHitQueryManager.getTransaction().begin();
-        editor.generateQueries().forEach(query -> {
+        editor.getGeneratedQueries().forEach(query -> {
             allQueries.addFirst(query);
             checkHitQueryManager.persist(query);
         });

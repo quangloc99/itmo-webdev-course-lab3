@@ -27,11 +27,11 @@
         </div>
     </div>
 
-    <h:panelGroup id="input-animation-values">
+    <p:outputPanel id="input-animation-values">
         <style type="text/css">
             :root {
                 --input-ani-r: #{app.editor.r};
-                --input-ani-x: #{app.editor.x};
+                --input-ani-x: #{app.editor.x eq null ? 0 : app.editor.x};
             }
 
             svg [id^=input-point-for] {
@@ -39,14 +39,14 @@
             }
         </style>
 
-        <ui:repeat var="val" value="#{app.editor.generateQueries()}">
+        <c:forEach var="val" items="#{app.editor.generatedQueries}">
             <style>
                 #input-point-for_#{val.y.toString().replace('.', '-')} {
                     opacity: 1;
                 }
             </style>
-        </ui:repeat>
-    </h:panelGroup>
+        </c:forEach>
+    </p:outputPanel>
     <h:panelGroup id="output-animation-values">
         <style>
             :root {
@@ -127,7 +127,9 @@
     </div>
 
     <h2>Queries result</h2>
-    <p:commandButton value="Clear all queries" actionListener="#{app.deleteAllQueries}" update="queries-table, output-animation-values"/>
+    <p:commandButton value="Clear all queries" immediate="true"
+                     actionListener="#{app.deleteAllQueries}"
+                     update="queries-table, output-animation-values"/>
     <br/>
     <div class="p-grid">
         <div class="p-col">
@@ -138,7 +140,7 @@
                          stickyHeader="true"
             >
                 <p:column headerText=" ">
-                    <p:commandButton value="Show" update="queries-table, output-animation-values">
+                    <p:commandButton value="Show" update="queries-table, output-animation-values" immediate="true">
                         <f:setPropertyActionListener target="#{app.displayingQuery}" value="#{o}"/>
                     </p:commandButton>
                 </p:column>
