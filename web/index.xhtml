@@ -49,6 +49,6 @@
         />
         <p:poll interval="#{variantData.interactiveClockInterval}" listener="#{clock.updateNow}" update="clock-displayer"/>
     </h:form>
-    <p:commandButton action="app" value="To the app"/>
+    <p:commandButton action="#{app.toAppAction}" value="To the app"/>
 </h:body>
 </html>

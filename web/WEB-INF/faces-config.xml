@@ -4,4 +4,23 @@
     xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee 
     http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_3.xsd">
 
+    <navigation-rule>
+        <from-view-id>/index.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{app.toAppAction}</from-action>
+            <from-outcome>to-app</from-outcome>
+            <to-view-id>/app.xhtml</to-view-id>
+        </navigation-case>
+
+    </navigation-rule>
+
+    <navigation-rule>
+        <from-view-id>/app.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{app.toStartPageAction}</from-action>
+            <from-outcome>to-start</from-outcome>
+            <to-view-id>/index.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
 </faces-config>

@@ -15,6 +15,10 @@
 
 <h:body>
     <ui:include src="__caption.xhtml" />
+    <h:form>
+        <p:commandButton action="#{app.toStartPageAction}" value="To start page"/>
+    </h:form>
+
     <p:outputPanel id="input-animation-values">
         <style type="text/css">
             :root {

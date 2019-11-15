@@ -31,14 +31,20 @@ public class AppBean implements Serializable {
         Collections.reverse(allQueries);
     }
 
+    // these 2 "actions" methods is just for the sake of the lab.
+    public String toAppAction() {
+        return "to-app";
+    }
+
+    public String toStartPageAction() {
+        System.out.println("to start");
+        return "to-start";
+    }
+
     @PreDestroy
     public void destroy() {
         checkHitQueryManager.close();
         checkHitQueryManagerFactory.close();
-    }
-
-    public EditorBean getEditor() {
-        return editor;
     }
 
     public void addGeneratedQueriesToDB() {
@@ -77,6 +83,10 @@ public class AppBean implements Serializable {
         checkHitQueryManager.getTransaction().commit();
         allQueries.addFirst(curQuery);
         displayingQuery = curQuery;
+    }
+
+    public EditorBean getEditor() {
+        return editor;
     }
 
     public CheckingHitQuery getDisplayingQuery() {
