@@ -13,10 +13,11 @@ public class EditorBean {
 
     public List<CheckingHitQuery> getGeneratedQueries() {
         if (generatedQueries != null) return generatedQueries;
-        if (x == null) {
+        if (x == null || r == null) {
             return generatedQueries = Collections.emptyList();
         }
 
+        System.out.println(y);
         return generatedQueries = y.entrySet()
                 .stream()
                 .filter(Map.Entry::getValue)
