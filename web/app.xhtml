@@ -120,7 +120,16 @@
         </div>
 
         <div class="p-col-fixed" style="text-align: center; width: 375px;">
-            <custom:hitting-area-graph-template r="var(--input-ani-r)" maxR="6" fill="red" width="350" height="350">
+            <custom:hitting-area-graph-template r="var(--input-ani-r)"
+                                                maxR="6"
+                                                fill="red"
+                                                width="350"
+                                                height="350"
+                                                addMouseEvent="true"
+                                                relativeMouseX="#{app.interactiveInputX}"
+                                                relativeMouseY="#{app.interactiveInputY}"
+                                                action="#{app.click}"
+            >
                 <c:forEach var="val" items="#{variantData.yRange.listRepresentation}">
                     <custom:hitting-area-point x="var(--input-ani-x)" y="#{val}"
                                                id="input-point-for_#{val.toString().replace('.', '-')}"/>

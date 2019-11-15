@@ -14,11 +14,15 @@ import java.util.List;
 @Named("app")
 @ApplicationScoped
 public class AppBean implements Serializable {
-    private EditorBean editor = new EditorBean();
     private EntityManagerFactory checkHitQueryManagerFactory;
     private EntityManager checkHitQueryManager;
-    private CheckingHitQuery displayingQuery = null;
     private LinkedList<CheckingHitQuery> allQueries = null;
+
+    private EditorBean editor = new EditorBean();
+    private CheckingHitQuery displayingQuery = null;
+
+    private double interactiveInputX = Double.NaN;
+    private double interactiveInputY = Double.NaN;
 
     public AppBean() {
         checkHitQueryManagerFactory = Persistence.createEntityManagerFactory("Eclipselink_JPA");
@@ -59,6 +63,10 @@ public class AppBean implements Serializable {
         checkHitQueryManager.getTransaction().commit();
     }
 
+    public void click() {
+        System.out.println(interactiveInputX + " " + interactiveInputY);
+    }
+
     public CheckingHitQuery getDisplayingQuery() {
         return displayingQuery;
     }
@@ -66,4 +74,21 @@ public class AppBean implements Serializable {
     public void setDisplayingQuery(CheckingHitQuery displayingQuery) {
         this.displayingQuery = displayingQuery;
     }
+
+    public double getInteractiveInputX() {
+        return interactiveInputX;
+    }
+
+    public void setInteractiveInputX(double interactiveInputX) {
+        this.interactiveInputX = interactiveInputX;
+    }
+
+    public double getInteractiveInputY() {
+        return interactiveInputY;
+    }
+
+    public void setInteractiveInputY(double interactiveInputY) {
+        this.interactiveInputY = interactiveInputY;
+    }
+
 }

@@ -4,6 +4,8 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui"
       xmlns:composite="http://java.sun.com/jsf/composite"
 >
 
@@ -13,13 +15,48 @@
     <composite:attribute name="width" default="300"/>
     <composite:attribute name="height" default="300"/>
     <composite:attribute name="fill" default="yellow"/>
+    <composite:attribute name="relativeMouseX" />
+    <composite:attribute name="relativeMouseY" />
+    <composite:attribute name="addMouseEvent" default="false" />
+    <composite:attribute name="action" method-signature="void action()" />
 </composite:interface>
 
 <composite:implementation>
-    <svg width="#{cc.attrs.width}" height="#{cc.attrs.height}"
-         viewBox="-100 -100 200 200"
-         xmlns="http://www.w3.org/2000/svg"
-         style="
+    <c:if test="#{__htting_area_graph_template_script_guard__ eq null}">
+        <c:set var="__hitting_area_graph_template_script_guard__" value="1" scope="request" />
+        <h:outputScript>
+            /* <![CDATA[ */
+            window.httingAreaGraphTemplateUpdateMouseCoordinate = function updateMouseCoordinates(event, maxR) {
+                const target = event.target;
+                const next = target.nextElementSibling;
+                if (!next || !next.classList.contains('mouse-coor')) {
+                    return ;
+                }
+
+                const rect = target.getBoundingClientRect();
+                let x = event.clientX - rect.left;
+                let y = event.clientY - rect.top;
+                if (x < 0 || x > rect.width || y < 0 || y > rect.height) {
+                    x = y = NaN;
+                }
+                x -= rect.width / 2;
+                y -= rect.height / 2;
+                const unit = maxR * 2 / rect.width;
+                x *= unit;
+                y *= -unit;
+                next.querySelector('[id$=x]').value = '' + x;
+                next.querySelector('[id$=y]').value = '' + y;
+            }
+
+            /* ]]> */
+        </h:outputScript>
+    </c:if>
+
+    <h:panelGroup id="wrapper">
+        <svg id="#{cc.attrs.id}" width="#{cc.attrs.width}" height="#{cc.attrs.height}"
+             viewBox="-100 -100 200 200"
+             xmlns="http://www.w3.org/2000/svg"
+             style="
              transform: scale(1, -1);
              border: 1px solid black;
              --unit: calc(100px / #{cc.attrs.maxR});
@@ -27,21 +64,23 @@
              --half-r: calc(var(--r) / 2);
              --fill-color: #{cc.attrs.fill};
              --sqrt2: 1.41421356237;
-        "
-    >
-        <rect x="0" y="0" style="
+         "
+             onmousedown="#{cc.attrs.addMouseEvent ? 'httingAreaGraphTemplateUpdateMouseCoordinate(event, '.concat(cc.attrs.maxR).concat(')') : ''}"
+             onmouseout="#{cc.attrs.addMouseEvent ? 'httingAreaGraphTemplateUpdateMouseCoordinate(event, '.concat(cc.attrs.maxR).concat(')') : ''}"
+        >
+            <rect x="0" y="0" style="
             width: var(--r);
             height: var(--half-r);
             fill: var(--fill-color);
         "/>
 
-        <circle cx="0" cy="0" clip-path="inset(0px 0px 50% 50%) " style="
+            <circle cx="0" cy="0" clip-path="inset(0px 0px 50% 50%) " style="
             r: var(--half-r);
             fill: var(--fill-color);
         "/>
 
-        <g clip-path="inset(0px 50% 50% 0px)">
-            <rect  style="
+            <g clip-path="inset(0px 50% 50% 0px)">
+                <rect  style="
                 x: calc(0px - var(--half-r));
                 y: calc(0px - var(--half-r));
                 width: var(--r);
@@ -49,13 +88,28 @@
                 fill: var(--fill-color);
                 transform: scale(0.5, 1) rotate(45deg) scale(var(--sqrt2));
             "/>
-        </g>
+            </g>
 
-        <line x1="-100" y1="0" x2="100" y2="0" stroke="black" stroke-width="2" />
-        <line x1="0" y1="-100" x2="0" y2="100" stroke="black" stroke-width="2" />
+            <line x1="-100" y1="0" x2="100" y2="0" stroke="black" stroke-width="2" />
+            <line x1="0" y1="-100" x2="0" y2="100" stroke="black" stroke-width="2" />
 
-        <composite:insertChildren/>
+            <composite:insertChildren/>
 
-    </svg>
+        </svg>
+        <c:if test="#{cc.attrs.addMouseEvent}">
+            <h:form id="mouse-coor" class="mouse-coor">
+                <h:inputHidden id="mouse-x" value="#{cc.attrs.relativeMouseX}" >
+                    <f:converter converterId="javax.faces.Double"/>
+                </h:inputHidden>
+                <h:inputHidden id="mouse-y" value="#{cc.attrs.relativeMouseY}" >
+                    <f:converter converterId="javax.faces.Double"/>
+                </h:inputHidden>
+            </h:form>
+            <c:if test="#{!empty cc.getValueExpression('action')}">
+                <p:ajax form="mouse-coor" event="click" listener="#{cc.attrs.action}" />
+            </c:if>
+        </c:if>
+
+    </h:panelGroup>
 </composite:implementation>
 </html>
