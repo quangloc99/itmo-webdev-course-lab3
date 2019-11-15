@@ -63,8 +63,20 @@ public class AppBean implements Serializable {
         checkHitQueryManager.getTransaction().commit();
     }
 
-    public void click() {
-        System.out.println(interactiveInputX + " " + interactiveInputY);
+    public void acceptInteractiveInput() {
+        if (Double.isNaN(interactiveInputX) || Double.isNaN(interactiveInputY)) {
+            return ;
+        }
+        if (editor.getR() == null) {
+            return ;
+        }
+
+        CheckingHitQuery curQuery = new CheckingHitQuery(interactiveInputX, interactiveInputY, editor.getR());
+        checkHitQueryManager.getTransaction().begin();
+        checkHitQueryManager.persist(curQuery);
+        checkHitQueryManager.getTransaction().commit();
+        allQueries.addFirst(curQuery);
+        displayingQuery = curQuery;
     }
 
     public CheckingHitQuery getDisplayingQuery() {

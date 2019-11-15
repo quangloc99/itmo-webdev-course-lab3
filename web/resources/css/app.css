@@ -14,6 +14,14 @@ svg *, tr{
     transition: all 0.5s ease;
 }
 
+svg#input-graph {
+    cursor: crosshair;
+}
+
+svg#input-graph:hover .points * {
+    opacity: 0 !important;
+}
+
 tr {
     text-align: center;
 }

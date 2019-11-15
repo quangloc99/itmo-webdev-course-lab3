@@ -120,7 +120,8 @@
         </div>
 
         <div class="p-col-fixed" style="text-align: center; width: 375px;">
-            <custom:hitting-area-graph-template r="var(--input-ani-r)"
+            <custom:hitting-area-graph-template id="input-graph"
+                                                r="var(--input-ani-r)"
                                                 maxR="6"
                                                 fill="red"
                                                 width="350"
@@ -128,13 +129,15 @@
                                                 addMouseEvent="true"
                                                 relativeMouseX="#{app.interactiveInputX}"
                                                 relativeMouseY="#{app.interactiveInputY}"
-                                                action="#{app.click}"
+                                                action="#{app.acceptInteractiveInput}"
+                                                update="output-animation-values, queries-table"
             >
                 <c:forEach var="val" items="#{variantData.yRange.listRepresentation}">
                     <custom:hitting-area-point x="var(--input-ani-x)" y="#{val}"
                                                id="input-point-for_#{val.toString().replace('.', '-')}"/>
                 </c:forEach>
             </custom:hitting-area-graph-template>
+            Click the graph to add a new query.
         </div>
     </div>
 
