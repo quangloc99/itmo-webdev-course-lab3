@@ -68,8 +68,9 @@
                                      converterMessage="must be number between #{variantData.xRange.low} and #{variantData.xRange.high}"
                                      validatorMessage="must be number between #{variantData.xRange.low} and #{variantData.xRange.high}"
                         >
+                            <f:converter converterId="ru.ifmo.se.s267880.pip.lab3.facesConverter.DoubleWithComma" />
+<!--                            <f:converter converterId="javax.faces.Double"/>-->
                             <f:validateDoubleRange minimum="#{variantData.xRange.low}" maximum="#{variantData.xRange.high}"/>
-                            <f:converter converterId="javax.faces.Double" />
                             <p:ajax event="keyup" update="input-x-message, input-animation-values" validateClient="true"/>
                         </p:inputText>
                     </div>
