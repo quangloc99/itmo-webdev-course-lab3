@@ -6,17 +6,38 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui"
       xmlns:custom="http://java.sun.com/jsf/composite/custom-components"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
 >
 <h:head>
     <title>Lab 3 - Web programming - Tran Quang Loc</title>
+    <h:outputStylesheet name="css/app.css"/>
+    <h:outputStylesheet name="css/primeflex.css"/>
 </h:head>
 <h:body>
-    <div class="caption">
-       <h1>Web programming - Lab 3</h1>
-       <h2>Tran Quang Loc</h2>
-       <h2>P3200</h2>
-       <p>Variant: 200027</p>
+    <ui:include src="__caption.xhtml" />
+    <div>
+        <h2>Task</h2>
+        <div class="p-grid">
+            <div class="p-col-fixed">
+                <h:graphicImage name="img/areas.png" />
+            </div>
+            <div class="p-col">
+                Дополнительные требования к приложению:
+                <ul>
+                    <li>Интерактивные часы, показывающие текущие дату и время, обновляющиеся раз в <b>13</b> секунд.</li>
+                    <li>Все результаты проверки должны сохраняться в базе данных под управлением СУБД PostgreSQL.</li>
+                    <li>Для доступа к БД необходимо использовать ORM EclipseLink. </li>
+                    <li>Для управления списком результатов должен использоваться Application-scoped Managed Bean. </li>
+                    <li>Конфигурация управляемых бинов должна быть задана с помощью аннотаций. </li>
+                    <li>Правила навигации между страницами приложения должны быть заданы в отдельном конфигурационном файле.</li>
+                </ul>
+            </div>
+
+        </div>
+
     </div>
+    <h2>Interactive clock</h2>
+    This is sadly is not beautiful, but it is functional :)).
     <h:form>
         <custom:simple-clock id="clock-displayer"
                              day="#{clock.now.dayOfMonth}"
@@ -26,8 +47,8 @@
                              minute="#{clock.now.minute}"
                              second="#{clock.now.second}"
         />
-        <p:poll interval="3" listener="#{clock.updateNow}" update="clock-displayer"/>
-        <h:commandButton action="app" value="To the app"/>
+        <p:poll interval="#{variantData.interactiveClockInterval}" listener="#{clock.updateNow}" update="clock-displayer"/>
     </h:form>
+    <p:commandButton action="app" value="To the app"/>
 </h:body>
 </html>

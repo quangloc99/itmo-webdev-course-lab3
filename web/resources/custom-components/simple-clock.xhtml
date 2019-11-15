@@ -21,10 +21,22 @@
     <composite:implementation>
         <div id="#{cc.clientId}">
             <h:outputText value="Time: " />
-            #{cc.attrs.hour}:#{cc.attrs.minute}:#{cc.attrs.second}
-
+            <code>
+                <h:outputText value="#{cc.attrs.hour}">
+                    <f:convertNumber minIntegerDigits="2"/>
+                </h:outputText>
+                <h:outputText value=":"/>
+                <h:outputText value="#{cc.attrs.minute}">
+                    <f:convertNumber minIntegerDigits="2"/>
+                </h:outputText>
+                <h:outputText value=":"/>
+                <h:outputText value="#{cc.attrs.second}">
+                    <f:convertNumber minIntegerDigits="2"/>
+                </h:outputText>
+            </code>
+            <br/>
             <h:outputText value="Date: " />
-            #{cc.attrs.day}/#{cc.attrs.month}/#{cc.attrs.year}
+            <code>#{cc.attrs.day} #{cc.attrs.month} #{cc.attrs.year}</code><br/>
         </div>
     </composite:implementation>
 </html>

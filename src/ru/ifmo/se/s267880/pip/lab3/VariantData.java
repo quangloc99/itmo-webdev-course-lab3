@@ -12,6 +12,7 @@ public class VariantData implements Serializable {
     private Range xRange = new Range(-3, 3);
     private Range yRange = new Range(-5, 5, 1);
     private Range rRange = new Range(1, 3, 0.5);
+    private int interactiveClockInterval = 13;
 
     public Range getxRange() {
         return xRange;
@@ -25,4 +26,7 @@ public class VariantData implements Serializable {
         return rRange;
     }
 
+    public int getInteractiveClockInterval() {
+        return interactiveClockInterval;
+    }
 }
