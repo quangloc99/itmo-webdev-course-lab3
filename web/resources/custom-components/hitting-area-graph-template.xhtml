@@ -45,8 +45,8 @@
                 const unit = maxR * 2 / rect.width;
                 x *= unit;
                 y *= -unit;
-                next.querySelector('[id$=x]').value = '' + x;
-                next.querySelector('[id$=y]').value = '' + y;
+                next.querySelector('[id$=x]').value = x.toFixed(3);
+                next.querySelector('[id$=y]').value = y.toFixed(3);
             }
 
             /* ]]> */
